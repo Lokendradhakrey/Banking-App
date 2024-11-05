@@ -2,6 +2,7 @@ package com.bankingApp.account.services.impl;
 
 import com.bankingApp.account.dto.AccountDto;
 import com.bankingApp.account.entities.Account;
+import com.bankingApp.account.exceptions.ResourceNotFoundException;
 import com.bankingApp.account.repositories.AccountRepo;
 import com.bankingApp.account.services.AccountService;
 import lombok.Builder;
@@ -30,7 +31,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public AccountDto updateAccount(Integer accountId, AccountDto accountDto) {
-        Account account = accountRepository.findById(accountId).orElseThrow(() -> new RuntimeException("Account not found"));
+        Account account = accountRepository.findById(accountId).orElseThrow(() -> new ResourceNotFoundException("Account not found with the given information"));
         account.setAccountNo(accountDto.getAccountNo());
         account.setAccountHolderName(accountDto.getAccountHolderName());
         account.setAccountType(accountDto.getAccountType());
@@ -42,13 +43,13 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void deleteAccount(Integer accountId) {
-        Account account = accountRepository.findById(accountId).orElseThrow(() -> new RuntimeException("Account not found"));
+        Account account = accountRepository.findById(accountId).orElseThrow(() -> new ResourceNotFoundException("Account not found with the given information"));
         accountRepository.delete(account);
     }
 
     @Override
     public AccountDto getAccount(Integer accountId) {
-        Account account = accountRepository.findById(accountId).orElseThrow(() -> new RuntimeException("Account not found"));
+        Account account = accountRepository.findById(accountId).orElseThrow(() -> new ResourceNotFoundException("Account not found with the given information"));
         return modelMapper.map(account, AccountDto.class);
     }
 
